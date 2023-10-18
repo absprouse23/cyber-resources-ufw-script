@@ -1,0 +1,1 @@
+rm (Get-PSReadlineOption).HistorySavePath

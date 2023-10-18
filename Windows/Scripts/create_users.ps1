@@ -1,5 +1,5 @@
 
-$path = Read-Host "Enter a file name to read from"
+$path = Read-Host "Enter a csv to read from"
 
 Import-Csv $path | Foreach-Object {
 	$params = @{

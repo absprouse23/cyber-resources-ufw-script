@@ -1,28 +1,26 @@
-# quick audit script
+#!/bin/bash
 
-enbolden=$(tput bold)
-normal=$(tput sgr0)
-red=$(tput setaf 1)
+# Declares command line arguments and current user
+OUT_FILE="$1"
+CURR_USER=$(whoami)
 
-echo -e "$red$enbolded>>List of sudoers<<$normal"
-sudo cat /etc/sudoers | grep -v '^$\|^\s*#\|^@'
+main()
+{
+	# Prints user to stdout and to the outfile given
+	echo "Auditing users: "
+	system_accounts=$(cut -d: -f1,3 /etc/passwd | awk -F: '$2 < 1000 {print $1}')
+	echo $CURR_USER
+	echo "$system_accounts"
+	echo $CURR_USER >> $OUT_FILE
+	echo "$system_accounts" >> $OUT_FILE
 
-echo -e "\n"
+	# Auditing groups to stdout and to the outfile
+	printf "\nAuditing groups:\n"
+	system_groups=$(cut -d: -f1,3 /etc/group | awk -F: '$2 < 1000 {print $1}')
+	echo "$system_groups"
+	printf "\n" >> $OUT_FILE
+	echo "$system_groups" >> $OUT_FILE
+		
+}
 
-echo -e "$red$enbolden>>list of users<<$normal"
-cat /etc/passwd | cut -d: -f1 | sort
-
-echo -e "\n"
-
-echo -e "$red$enbolden>>List of groups<<$normal"
-cat /etc/group | cut -d: -f1 | sort
-
-echo -e "\n"
-
-echo -e "$red$enbolden>>List of users and their associated groups<<$normal"
-for user in $(cut -d: -f1 /etc/passwd); do
-	echo "User: $user"
-	id $user
-	echo "--------------------"
-done
-
+main

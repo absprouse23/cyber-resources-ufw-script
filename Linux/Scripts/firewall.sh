@@ -1,9 +1,12 @@
 #!/bin/bash
+# Aaron Sprouse
+# Clemson CUCyber
+# 2023
 
 # Function to print UFW rules
 print_rules() {
     echo "UFW Firewall Rules:"
-    ufw status verbose
+    ufw status numbered
 }
 
 # Function to add a rule
